@@ -1,0 +1,58 @@
+package com.Attribute;
+
+import java.awt.AWTException;
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.time.Duration;
+import java.util.List;
+
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import com.google.common.io.Files;
+
+import org.openqa.selenium.JavascriptExecutor;
+
+public class BasicDevice {
+    public static void main(String[] args) throws InterruptedException, AWTException, IOException {
+    	
+    WebDriver driver=new ChromeDriver();
+    driver.get("http://www.deadlinkcity.com/");
+    
+    List<WebElement> links=driver.findElements(By.tagName("a"));
+    
+    System.out.println(links.size());
+    
+    for(WebElement alllink:links) {
+    String li=	alllink.getAttribute("href");
+    if(li==null || li.isEmpty()) {
+    	System.out.println("links r not pri=estent");
+    	continue;
+    }
+    
+    try {
+   URL stringtourl=new URL(li);
+   HttpURLConnection serverReq=(HttpURLConnection) stringtourl.openConnection();
+   serverReq.connect();
+   if(serverReq.getResponseCode()<=400) {
+	   System.out.println("no broken links");
+   }
+   else {
+	   System.out.println("broken links");
+
+   }
+    }
+    catch(Exception e) {
+    	System.out.println("occur");
+    }
+    	
+    
+    }
+    }
+}
+
+
+
